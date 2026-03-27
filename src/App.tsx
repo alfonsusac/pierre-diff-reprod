@@ -1,9 +1,32 @@
-"use client"
+import { useState, type ReactNode } from 'react'
+import './App.css'
+import { MultiFileDiff, WorkerPoolContextProvider } from '@pierre/diffs/react'
 
-import { MultiFileDiff, WorkerPoolContextProvider } from "@pierre/diffs/react"
-import { useState, type ReactNode } from "react"
+function App() {
+  return (
+    <>
+      <section id="center" >
+        <div style={{
+          width: '100%',
+          maxWidth: "800px"
+        }}>
+          <ClientComponent />
+        </div>
+      </section>
 
-export function ClientComponent() {
+      <div className="ticks"></div>
+      <section id="spacer"></section>
+    </>
+  )
+}
+
+export default App
+
+
+
+
+
+function ClientComponent() {
   const [ contentA, setContentA ] = useState(oldFile.contents)
   const [ contentB, setContentB ] = useState(newFile.contents)
   const [ filenameA, setFilenameA ] = useState(oldFile.name)
@@ -11,7 +34,12 @@ export function ClientComponent() {
 
   return (
     <HighlightProvider>
-      <div className="grid grid-cols-2 gap-4">
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '1rem',
+        marginBottom: '2rem',
+      }}>
         <input type="text" value={filenameA} onChange={e => setFilenameA(e.target.value)} />
         <input type="text" value={filenameB} onChange={e => setFilenameB(e.target.value)} />
         <textarea value={contentA} onChange={e => setContentA(e.target.value)} className="w-full h-64" />
@@ -45,20 +73,17 @@ The five boxing wizards jump quickly.
 Bright vixens jump; dozy fowl quack.
 Jackdaws love my big sphinx of quartz.
 `,
-};
-
-
-
-export function workerFactory(): Worker {
-  return new Worker(
-    new URL(
-      '@pierre/diffs/worker/worker.js',
-      import.meta.url
-    )
-  )
 }
 
-export function HighlightProvider({ children }: { children: ReactNode }) {
+
+import WorkerUrl from '@pierre/diffs/worker/worker.js?worker&url'
+
+export function workerFactory(): Worker {
+  return new Worker(WorkerUrl, { type: 'module' })
+}
+
+
+function HighlightProvider({ children }: { children: ReactNode }) {
   return (
     <WorkerPoolContextProvider
       poolOptions={{
