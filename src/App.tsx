@@ -46,8 +46,11 @@ function ClientComponent() {
         <textarea value={contentB} onChange={e => setContentB(e.target.value)} className="w-full h-64" />
       </div>
       <MultiFileDiff
-        oldFile={{ name: filenameA, contents: contentA }}
-        newFile={{ name: filenameB, contents: contentB }}
+        style={{
+          textAlign: 'left',
+        }}
+        oldFile={{ name: filenameA, contents: contentA, lang: "yaml" }}
+        newFile={{ name: filenameB, contents: contentB, lang: "yaml" }}
       />
     </HighlightProvider>
   )
