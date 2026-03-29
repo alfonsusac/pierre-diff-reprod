@@ -27,30 +27,14 @@ export default App
 
 
 function ClientComponent() {
-  const [ contentA, setContentA ] = useState(oldFile.contents)
-  const [ contentB, setContentB ] = useState(newFile.contents)
-  const [ filenameA, setFilenameA ] = useState(oldFile.name)
-  const [ filenameB, setFilenameB ] = useState(newFile.name)
-
   return (
     <HighlightProvider>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '1rem',
-        marginBottom: '2rem',
-      }}>
-        <input type="text" value={filenameA} onChange={e => setFilenameA(e.target.value)} />
-        <input type="text" value={filenameB} onChange={e => setFilenameB(e.target.value)} />
-        <textarea value={contentA} onChange={e => setContentA(e.target.value)} className="w-full h-64" />
-        <textarea value={contentB} onChange={e => setContentB(e.target.value)} className="w-full h-64" />
-      </div>
       <MultiFileDiff
         style={{
           textAlign: 'left',
         }}
-        oldFile={{ name: filenameA, contents: contentA, lang: "yaml" }}
-        newFile={{ name: filenameB, contents: contentB, lang: "yaml" }}
+        oldFile={{ name: oldFile.name, contents: oldFile.contents, lang: "yaml" }}
+        newFile={{ name: newFile.name, contents: newFile.contents, lang: "yaml" }}
       />
     </HighlightProvider>
   )
